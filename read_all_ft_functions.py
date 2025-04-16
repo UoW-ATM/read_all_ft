@@ -1,6 +1,7 @@
 from pathlib import Path
 import pandas as pd
-import ddr_headers as ddrh
+from datetime import datetime, timedelta
+import read_all_ft.ddr_headers as ddrh
 
 __version__ = 6.0
 
@@ -100,7 +101,7 @@ def read_all_ft(allft_path, airac=None):
     return data, ddr_version
 
 
-def format_all_ft(data, ddr_version):
+def format_all_ft(data, ddr_version, convert_datetimes=False):
     # FORMATTING OF DDR DATA IN PANDA TABLE
 
     # These ones in ddr2 are only hhmmss while in ddr3 are dateandhms
@@ -127,6 +128,24 @@ def format_all_ft(data, ddr_version):
     data['cdm_sequenced_ttot'] = data['cdm_sequenced_ttot'].apply(date_formatting)
     data['cdm_no_slot_before'] = data['cdm_no_slot_before'].apply(date_formatting)
 
+    if convert_datetimes:
+        data['aobt'] = data['aobt'].apply(to_datetime)
+        data['iobt'] = data['iobt'].apply(to_datetime)
+        data['cobt'] = data['cobt'].apply(to_datetime)
+        data['eobt'] = data['eobt'].apply(to_datetime)
+        data['lobt'] = data['lobt'].apply(to_datetime)
+        data['sam_ctot'] = data['sam_ctot'].apply(to_datetime)
+        data['sip_ctot'] = data['sip_ctot'].apply(to_datetime)
+        data['last_sent_proposal_message'] = data['last_sent_proposal_message'].apply(to_datetime)
+        data['last_sent_slot_message'] = data['last_sent_slot_message'].apply(to_datetime)
+        data['intention_edition_date'] = data['intention_edition_date'].apply(to_datetime)
+        data['cdm_early_ttot'] = data['cdm_early_ttot'].apply(to_datetime)
+        data['cdm_ao_ttot'] = data['cdm_ao_ttot'].apply(to_datetime)
+        data['cdm_atc_ttot'] = data['cdm_atc_ttot'].apply(to_datetime)
+        data['cdm_sequenced_ttot'] = data['cdm_sequenced_ttot'].apply(to_datetime)
+        data['cdm_no_slot_before'] = data['cdm_no_slot_before'].apply(to_datetime)
+
+
     data['late_filer'] = data['late_filer'].apply(yes_no_binary)
     data['late_updater'] = data['late_updater'].apply(yes_no_binary)
     data['north_atlantic_flight_status'] = data['north_atlantic_flight_status'].apply(yes_no_binary)
@@ -140,6 +159,9 @@ def format_all_ft(data, ddr_version):
     data['intention_flight'] = data['intention_flight'].apply(yes_no_binary)
 
     data['cdm_taxi_time'] = data['cdm_taxi_time'].apply(time_elapsed_formatting)
+
+    if convert_datetimes:
+        data['cdm_taxi_time'] = data['cdm_taxi_time'].apply(to_timedelta)
 
     return data
 
@@ -192,3 +214,19 @@ def yes_no_binary(x):
         return 1
     else:
         return 0
+
+
+def to_datetime(string):
+    if type(string) is float:
+        return None
+    else:
+        return datetime.strptime(string, '%Y-%m-%d %H:%M:%S')
+
+
+def to_timedelta(string):
+    if pd.isnull(string):
+        return string
+    else:
+        t = datetime.strptime(string,"%H:%M:%S")
+        delta = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+        return delta

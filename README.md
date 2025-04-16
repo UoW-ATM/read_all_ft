@@ -20,7 +20,7 @@ See main_example_read.py for an example on how to use the library (read_all_ft_f
 
 ## Requirements
 
-You just need pandas
+pandas, datetime, 
 
 ## Future work
 - Deal with a compressed version of the ALL_FT+ automatically so that the path given to read_all_FT could be the 'raw' ALL_FT+ or a zipped version. This is important as ALL_FT+ files can be very large, and their compressed version is much smaller.

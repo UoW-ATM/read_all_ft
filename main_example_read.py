@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(1, '..')
 import argparse
 
 from read_all_ft_functions import read_all_ft, format_all_ft
