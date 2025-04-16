@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import ddr_headers as ddrh
 
@@ -7,20 +8,71 @@ __version__ = 6.0
 # READ ALL_FT+ FILES
 
 def read_all_ft(allft_path, airac=None):
-    # READ FILE WITH TRAFFIC DATA AND CREATE PANDA STRUCTURE WITH HEADER OF DDR
-    data = pd.read_csv(allft_path, sep=";", skiprows=1, header=None)
-    
-    lpos = max(allft_path.rfind('\\'), allft_path.rfind('/'))
-    ddr_source = allft_path[lpos+1:]
+    # Detect if the file is compressed
+    allft_path = Path(allft_path)
 
-    # with open(allft_path) as f:
-    #    ddr_version = int(f.readline())
-    ddr_version_dat = pd.read_csv(allft_path, nrows=1, header=None)
+    extension = str(allft_path).split('.')[-1]
+    # print('Extension:', extension)
+
+    if extension == 'zip':
+        # File is compressed, and the compression is supported by pandas natively
+        compression = 'zip'
+    elif extension == 'gz':
+        # File is compressed, and the compression is supported by pandas natively
+        compression = 'gzip'
+    elif extension == 'bz2':
+        # File is compressed, and the compression is supported by pandas natively
+        compression = 'bz2'
+    elif extension == 'xz':
+        # File is compressed, and the compression is supported by pandas natively
+        compression = 'xz'
+    elif extension == '7z':
+        # File is compressed, but pandas does not support 7z decompression natively
+        compression = '7z'
+    else:
+        compression = None
+
+    # For DDR version
+    lpos = max(str(allft_path).rfind('\\'), str(allft_path).rfind('/'))
+    ddr_source = str(allft_path)[lpos + 1:]
+    if compression in ['zip', 'gzip', 'bz2', 'xz']:
+        ddr_version_dat = pd.read_csv(allft_path, nrows=1, header=None, compression=compression)
+
+        # Reading data
+        data = pd.read_csv(allft_path, sep=";", skiprows=1, header=None, compression=compression)
+    elif compression == '7z':
+        import py7zr
+        from io import StringIO, BytesIO
+
+        with py7zr.SevenZipFile(allft_path, mode='r') as z:
+            print('Decompressing ALLFT+ file from .7z archive...')
+            new_name = str(allft_path.stem)
+
+            file_content = z.read(targets=[new_name])[new_name]
+
+            # file_content_bytes = BytesIO(file_content)
+            file_content_str = file_content.read().decode('utf-8')
+
+            csv_content = StringIO(file_content_str)
+
+            # # Convert the file content to a StringIO object
+            # csv_content = StringIO(file_content_str)
+
+            # Convert the file content to a StringIO object
+            # csv_content = StringIO(file_content.decode('utf-8'))
+
+            # READ FILE WITH TRAFFIC DATA AND CREATE PANDA STRUCTURE WITH HEADER OF DDR
+            ddr_version_dat = pd.read_csv(csv_content, nrows=1, header=None)
+            data = pd.read_csv(csv_content, sep=";", skiprows=1, header=None)
+    else:
+        ddr_version_dat = pd.read_csv(allft_path, nrows=1, header=None)
+
+        # Reading data
+        data = pd.read_csv(allft_path, sep=";", skiprows=1, header=None)
+
     ddr_version = ddr_version_dat.iloc[0, 0]
-    
-    h_ddrv2, h_ddrv3, h_ddrv4, h_ddrv6, h_ddrv8 = ddrh.ddr_headers()
 
-    # print(ddr_version)
+    h_ddrv2, h_ddrv3, h_ddrv4, h_ddrv6, h_ddrv8 = ddrh.ddr_headers()
 
     if ddr_version == 6:
         data.columns = h_ddrv6
@@ -49,7 +101,6 @@ def read_all_ft(allft_path, airac=None):
 
 
 def format_all_ft(data, ddr_version):
-
     # FORMATTING OF DDR DATA IN PANDA TABLE
 
     # These ones in ddr2 are only hhmmss while in ddr3 are dateandhms
