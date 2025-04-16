@@ -5,6 +5,12 @@ import read_all_ft.ddr_headers as ddrh
 
 __version__ = 6.0
 
+def read_all_ft_formatted(allft_path, airace=None, convert_datetimes=True):
+    """
+    Main function with formatting for convenience. Use read_all_ft if you don't want formatting.
+    """
+    data, ddr_version = read_all_ft(allft_path, airace)
+    return format_all_ft(data, ddr_version, convert_datetimes=convert_datetimes)
 
 # READ ALL_FT+ FILES
 
@@ -46,7 +52,7 @@ def read_all_ft(allft_path, airac=None):
         from io import StringIO, BytesIO
 
         with py7zr.SevenZipFile(allft_path, mode='r') as z:
-            print('Decompressing ALLFT+ file from .7z archive...')
+            # print('Decompressing ALLFT+ file from .7z archive...')
             new_name = str(allft_path.stem)
 
             file_content = z.read(targets=[new_name])[new_name]

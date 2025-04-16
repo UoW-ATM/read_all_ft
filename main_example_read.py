@@ -2,7 +2,7 @@ import sys
 sys.path.insert(1, '..')
 import argparse
 
-from read_all_ft_functions import read_all_ft, format_all_ft
+from read_all_ft_functions import read_all_ft, format_all_ft, read_all_ft_formatted
 
 
 def main():
@@ -31,6 +31,11 @@ def main():
     df_formatted = format_all_ft(df, ddr_version)
     print("FORMATTED")
     print(df_formatted.head())
+
+    # Instead of the two steps above, you can also use the read_all_ft_formatted directly like this:
+    # df = read_all_ft_formatted(args.file, airac=airac)
+    # print("FORMATTED")
+    # print(df.head())
 
 
 if __name__ == "__main__":

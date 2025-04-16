@@ -3,30 +3,42 @@ Repository with code to read DDR ALL_FT+ into pandas dataframe.
 
 This repository provides a library with basic functions to read an ALL_FT+ file and create a dataframe.
 
+## Usage
 
-## Capacities of library
+Install dependencies:
 
-The library (read_all_ft_functions.py) provides 
-two main functions:
+```
+pip install pandas py7zr
+```
 
-- read_all_ft to read an ALL_FT+ file and create a dataframe
+py7zr is optional if your files are not in `.7z` format.
+
+Then import:
+```python
+from read_all_ft.read_all_ft_functions import read_all_ft_formatted
+```
+
+Main function is `read_all_ft_formatted`:
+```python
+df = read_all_ft_formatted(path_to_all_ft_plus_file)
+```
+
+which returns nicely formatted columns. The file can uncompressed, or in the following formats:
+`.zip`, `.gz`, `.bz2`, `.xz`, `.7z`. The function will automatically detect the format.
+
+The function `read_all_ft_formatted` also had a flag `convert_datetimes`, True by default. If True, all time columns are 
+returned as `datetime` or `timedelta` objects, not strings.
+
+If you need, you can use the low-level functions:
+- read_all_ft to read an ALL_FT+ file and create a dataframe with only strings.
 - format_all_ft which given a dataframe read with read_all_ft formats the columns.
-
-read_all_ft function which expects the path to the ALL_FT+ file and returns a dataframe with the information on the file. It automatically reads the ALL_FT+ version and uses the right header for the columns provided. Versions of ALL_FT+ supported are: 2, 3, 4, 5 (same as 4), 6 and 8.
 
 airac can be passed as a parameter to add the AIRAC to the dataframe as a column.
 
-See main_example_read.py for an example on how to use the library (read_all_ft_functions.py). 
-
-## Requirements
-
-pandas, datetime, 
+See main_example_read.py for an example on how to use the library.
 
 ## Future work
-- Deal with a compressed version of the ALL_FT+ automatically so that the path given to read_all_FT could be the 'raw' ALL_FT+ or a zipped version. This is important as ALL_FT+ files can be very large, and their compressed version is much smaller.
-
 - Provide a function to automatically read all ALL_FT+ from a given folder.
-
 
 ## Licence
 The library is released under the GPL v3 licence. The licence can be found in LICENCE.TXT
