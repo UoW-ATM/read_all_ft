@@ -5,11 +5,11 @@ import read_all_ft.ddr_headers as ddrh
 
 __version__ = 6.0
 
-def read_all_ft_formatted(allft_path, airace=None, convert_datetimes=True):
+def read_all_ft_formatted(allft_path, airac=None, convert_datetimes=True):
     """
     Main function with formatting for convenience. Use read_all_ft if you don't want formatting.
     """
-    data, ddr_version = read_all_ft(allft_path, airace)
+    data, ddr_version = read_all_ft(allft_path, airac)
     return format_all_ft(data, ddr_version, convert_datetimes=convert_datetimes)
 
 # READ ALL_FT+ FILES
