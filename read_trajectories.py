@@ -11,7 +11,7 @@ def convert_coordinates(coord):
     lat_deg = int(coord[:2])  # Latitude degrees
     lat_min = int(coord[2:4])  # Latitude minutes
     lat_min_decimal = int(coord[4:6])  # Latitude minutes decimal
-    lat = lat_deg + lat_min / 60 + lat_min_decimal / 6000
+    lat = lat_deg + lat_min / 60 + lat_min_decimal / 3600
 
     # Check if latitude is North or South (N or S)
     if coord[6] == 'S':
@@ -21,7 +21,7 @@ def convert_coordinates(coord):
     lon_deg = int(coord[7:10])  # Longitude degrees
     lon_min = int(coord[10:12])  # Longitude minutes
     lon_min_decimal = int(coord[12:14])  # Longitude minutes decimal
-    lon = lon_deg + lon_min / 60 + lon_min_decimal / 6000
+    lon = lon_deg + lon_min / 60 + lon_min_decimal / 3600
 
     # Check if longitude is East or West (E or W)
     if coord[14] == 'W':
