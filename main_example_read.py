@@ -37,6 +37,15 @@ def main():
     # print("FORMATTED")
     # print(df.head())
 
+    # You can read all files inside a folder (data in this example). By default formated but could be indicated not to:
+    # df = read_all_ft_folder('./data/', airac)
+
+    # You can select a set of columnns to read only
+    # columns = ['origin', 'destination', 'ac_id', 'operator', 'ifps_id', 'aobt', 'iobt', 'eobt', 'lobt', 'cobt']
+    # df = read_all_ft_folder('./data/', airac, columns=columns) # reading a folder
+    # df = read_all_ft_formatted(args.file, airac=airac, columns=columns) # reading a file formated
+    # df, ddr_version = read_all_ft(args.file, airac, columns=columns) # reading a file without formating
+
 
 if __name__ == "__main__":
     # Example of use  python3 ./main_example_read.py -f ./20190901.ALL_FT+

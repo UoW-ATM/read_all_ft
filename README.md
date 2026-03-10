@@ -35,10 +35,11 @@ If you need, you can use the low-level functions:
 
 airac can be passed as a parameter to add the AIRAC to the dataframe as a column.
 
-See main_example_read.py for an example on how to use the library.
+columns can be passed as a parameter and only those columns are read from the files (faster and lower memory).
 
-## Future work
-- Provide a function to automatically read all ALL_FT+ from a given folder.
+`read_all_ft_folder` allows for all files inside a folder to be read and returned in one single dataframe. Files read in parallel.
+
+See main_example_read.py for an example on how to use the library.
 
 ## Licence
 The library is released under the GPL v3 licence. The licence can be found in LICENCE.TXT
