@@ -83,8 +83,9 @@ def read_all_ft_folder(folder_path, airac=None, formatted=True, convert_datetime
     """
     folder_path = Path(folder_path)
 
-    valid_extensions = {'.zip', '.gz', '.bz2', '.xz', '.7z', '.csv', '.txt'}
-    files = [f for f in sorted(folder_path.iterdir())
+    valid_extensions = {'.zip', '.gz', '.bz2', '.xz', '.7z', '.csv', '.ALL_FT+'}
+    for f in sorted(folder_path.iterdir()):
+        files = [f for f in sorted(folder_path.iterdir())
              if f.is_file() and (f.suffix in valid_extensions or '.' not in f.name)]
 
     if not files:
