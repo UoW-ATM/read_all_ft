@@ -112,7 +112,7 @@ if __name__ == "__main__":
     # Testing
 
     import sys
-    sys.path.insert(1, '..')
+    sys.path.insert(1, '../../..')
     from read_all_ft_functions import read_all_ft_formatted
 
     allft_path = "/home/earendil/Documents/Westminster/Data/DDR/archive_20240110_1142_7/20190901.ALL_FT+"

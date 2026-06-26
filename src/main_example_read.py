@@ -1,8 +1,8 @@
 import sys
-sys.path.insert(1, '..')
+sys.path.insert(1, '../..')
 import argparse
 
-from read_all_ft_functions import read_all_ft, format_all_ft, read_all_ft_formatted
+from read_all_ft.read_all_ft_functions import read_all_ft, format_all_ft
 
 
 def main():

@@ -1,1 +1,4 @@
 *.ALL_FT+
+.idea
+uv.lock
+*pycache*

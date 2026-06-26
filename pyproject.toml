@@ -1,0 +1,9 @@
+[project]
+name = "read-all-ft"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.3.3",
+    "py7zr>=1.1.3",
+]
